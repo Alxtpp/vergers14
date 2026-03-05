@@ -26,3 +26,4 @@ cd ~/Downloads/vergers14-deploy && python3 -m http.server 3000
 2. Lancer un serveur local sur http://localhost:3000 pour prévisualiser
 3. Demander confirmation avant tout push
 4. Attendre confirmation explicite avant de merger `develop` → `main`
+5. Pour déployer sur `main`, toujours utiliser : `git show develop:docs/index.html > index.html` (ne jamais copier avec `cp` — cela ne fonctionne pas entre branches)
