@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <title>Admin — Villas Vergers 14</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+    body { font-family: 'Inter', sans-serif; color: #3A3A3A; background: #F2EDE8; min-height: 100vh; line-height: 1.6; }
+
+    :root {
+      --white: #FFFFFF; --beige: #F2EDE8; --slate: #3A3A3A; --mid-grey: #8A8A8A;
+      --black-g: #1A1A1A; --green: #4A5E45; --green-dark: #3A4E35; --wood: #C8A97A; --radius: 2px;
+    }
+
+    h1, h2, h3 { font-family: 'DM Sans', sans-serif; color: var(--black-g); line-height: 1.15; }
+
+    /* ── Header ──────────────────────────────────── */
+    .admin-header {
+      background: var(--black-g); color: #fff; padding: 0 clamp(20px, 5%, 60px);
+      height: 64px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .admin-logo { font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: .2em; }
+    .admin-logo span { color: var(--wood); }
+    .admin-tag { font-family: 'DM Sans', sans-serif; font-size: .65rem; letter-spacing: .15em;
+      text-transform: uppercase; background: var(--green); color: #fff; padding: 3px 10px;
+      border-radius: 20px; margin-left: 12px; vertical-align: middle; }
+    .admin-user { display: flex; align-items: center; gap: 16px; }
+    .admin-email { font-size: .78rem; color: rgba(255,255,255,.6); }
+    .btn-logout { font-family: 'DM Sans', sans-serif; font-size: .7rem; letter-spacing: .1em;
+      text-transform: uppercase; padding: 6px 16px; background: transparent;
+      border: 1px solid rgba(255,255,255,.25); color: rgba(255,255,255,.8);
+      border-radius: var(--radius); cursor: pointer; transition: all .2s; }
+    .btn-logout:hover { border-color: rgba(255,255,255,.5); color: #fff; }
+
+    .admin-body { max-width: 720px; margin: 0 auto; padding: clamp(32px, 6vw, 60px) 20px; }
+
+    /* ── Login ────────────────────────────────────── */
+    .login-wrap {
+      max-width: 400px; margin: 80px auto; background: var(--white); padding: 48px 40px;
+      border-radius: var(--radius); box-shadow: 0 4px 24px rgba(0,0,0,.06);
+    }
+    .login-wrap h1 { font-size: 1.4rem; margin-bottom: 6px; }
+    .login-wrap .subtitle { font-size: .85rem; color: var(--mid-grey); margin-bottom: 32px; }
+    .login-wrap .divider { width: 48px; height: 2px; background: var(--wood); margin-bottom: 28px; }
+    .login-wrap label { font-family: 'DM Sans', sans-serif; font-size: .7rem; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--mid-grey); font-weight: 500; display: block; margin-bottom: 5px; }
+    .login-wrap input { font-family: 'Inter', sans-serif; font-size: 1rem; padding: 12px 14px;
+      border: 1px solid rgba(0,0,0,.14); border-radius: var(--radius); color: var(--slate);
+      background: var(--white); width: 100%; outline: none; transition: border-color .2s, box-shadow .2s;
+      -webkit-appearance: none; appearance: none; }
+    .login-wrap input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(74,94,69,.1); }
+    .form-group { margin-bottom: 18px; }
+    .btn { display: inline-block; padding: .9rem 2rem; background: var(--green); color: #fff;
+      font-family: 'DM Sans', sans-serif; font-size: .8rem; font-weight: 500;
+      letter-spacing: .12em; text-transform: uppercase; border-radius: var(--radius);
+      border: none; cursor: pointer; transition: background .25s, transform .2s; width: 100%; }
+    .btn:hover { background: var(--green-dark); transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .login-error { display: none; margin-top: 16px; padding: 12px 16px; background: rgba(192,57,43,.1);
+      border-left: 3px solid #c0392b; border-radius: var(--radius); color: #c0392b;
+      font-size: .85rem; font-weight: 500; }
+    .login-error.show { display: block; }
+
+    /* ── Dashboard ────────────────────────────────── */
+    .dashboard-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 6px; }
+    .dashboard-subtitle { font-size: .85rem; color: var(--mid-grey); margin-bottom: 32px; }
+    .dashboard-divider { width: 48px; height: 2px; background: var(--wood); margin-bottom: 28px; }
+
+    .villa-card {
+      background: var(--white); border-radius: var(--radius); padding: 24px 28px;
+      margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;
+      gap: 20px; box-shadow: 0 1px 4px rgba(0,0,0,.04); border: 1px solid rgba(0,0,0,.06);
+      transition: box-shadow .2s;
+    }
+    .villa-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.08); }
+    .villa-card-left { display: flex; align-items: center; gap: 16px; }
+    .villa-letter { font-family: 'DM Sans', sans-serif; font-size: 1.6rem; font-weight: 700;
+      color: var(--black-g); width: 44px; height: 44px; display: flex; align-items: center;
+      justify-content: center; background: var(--beige); border-radius: var(--radius); flex-shrink: 0; }
+    .villa-info { font-size: .82rem; color: var(--mid-grey); }
+    .villa-info strong { color: var(--slate); font-weight: 600; }
+
+    .status-select { font-family: 'DM Sans', sans-serif; font-size: .82rem; padding: 8px 32px 8px 14px;
+      border: 1px solid rgba(0,0,0,.14); border-radius: var(--radius); color: var(--slate);
+      background: var(--white); cursor: pointer; outline: none;
+      -webkit-appearance: none; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 5l3 3 3-3' fill='none' stroke='%238A8A8A' stroke-width='1.5'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 10px center;
+      transition: border-color .2s; }
+    .status-select:focus { border-color: var(--green); }
+
+    .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; }
+    .dot-disponible { background: var(--green); }
+    .dot-reserve { background: var(--wood); }
+    .dot-vendu { background: #c0392b; }
+
+    .save-section { margin-top: 28px; display: flex; align-items: center; gap: 16px; }
+    .btn-save { width: auto; padding: .75rem 2.4rem; }
+    .save-feedback { font-size: .85rem; font-weight: 500; opacity: 0; transition: opacity .3s; }
+    .save-feedback.show { opacity: 1; }
+    .save-feedback.success { color: var(--green); }
+    .save-feedback.error { color: #c0392b; }
+
+    .last-updated { margin-top: 28px; font-size: .75rem; color: var(--mid-grey); text-align: center; }
+
+    /* ── Responsive ───────────────────────────────── */
+    @media (max-width: 600px) {
+      .login-wrap { margin: 40px 16px; padding: 36px 24px; }
+      .admin-email { display: none; }
+      .villa-card { flex-direction: column; align-items: stretch; gap: 14px; }
+      .villa-card-left { justify-content: space-between; }
+      .status-select { width: 100%; }
+      .save-section { flex-direction: column; }
+      .btn-save { width: 100%; }
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="admin-header">
+  <div>
+    <span class="admin-logo">VERGERS <span>14</span></span>
+    <span class="admin-tag">Admin</span>
+  </div>
+  <div class="admin-user hidden" id="adminUser">
+    <span class="admin-email" id="adminEmail"></span>
+    <button class="btn-logout" id="btnLogout">Deconnexion</button>
+  </div>
+</header>
+
+<!-- LOGIN VIEW -->
+<div id="loginView">
+  <div class="login-wrap">
+    <h1>Connexion</h1>
+    <div class="divider"></div>
+    <p class="subtitle">Espace reserve a l'administration du site.</p>
+    <form id="loginForm" novalidate>
+      <div class="form-group">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" autocomplete="email" required/>
+      </div>
+      <div class="form-group">
+        <label for="loginPassword">Mot de passe</label>
+        <input type="password" id="loginPassword" autocomplete="current-password" required/>
+      </div>
+      <button type="submit" class="btn" id="btnLogin">Se connecter</button>
+    </form>
+    <div class="login-error" id="loginError"></div>
+  </div>
+</div>
+
+<!-- DASHBOARD VIEW -->
+<div id="dashboardView" class="hidden">
+  <div class="admin-body">
+    <h2 class="dashboard-title">Gestion des villas</h2>
+    <div class="dashboard-divider"></div>
+    <p class="dashboard-subtitle">Modifiez le statut de chaque villa. Les changements seront visibles immediatement sur le site.</p>
+
+    <div id="villaCards"></div>
+
+    <div class="save-section">
+      <button class="btn btn-save" id="btnSave">Enregistrer</button>
+      <span class="save-feedback" id="saveFeedback"></span>
+    </div>
+
+    <p class="last-updated" id="lastUpdated"></p>
+  </div>
+</div>
+
+<script>
+(function() {
+  // ── Configuration (remplacer par vos valeurs Firebase) ──
+  var FIREBASE_API_KEY = 'AIzaSyBrfzfPjxKH3-q1GXVz0v18g6BZFykCJIg';
+  var FIREBASE_DB_URL  = 'https://vergers14-statut-be-default-rtdb.europe-west1.firebasedatabase.app';
+  var FIREBASE_AUTH_URL = 'https://identitytoolkit.googleapis.com/v1/accounts';
+
+  // ── Villa data (static, matches index.html) ─────────────
+  var VILLAS = [
+    { id: 'A', jardin: '268 m\u00B2', surface: '115.8 m\u00B2', prix: '1 360 000 CHF' },
+    { id: 'B', jardin: '279 m\u00B2', surface: '116.3 m\u00B2', prix: '1 460 000 CHF' },
+    { id: 'C', jardin: '442 m\u00B2', surface: '116.3 m\u00B2', prix: '1 430 000 CHF' },
+    { id: 'D', jardin: '823 m\u00B2', surface: '116.3 m\u00B2', prix: '1 490 000 CHF' }
+  ];
+
+  var STATUS_LABELS = { disponible: 'Disponible', reserve: 'R\u00E9serv\u00E9', vendu: 'Vendu' };
+  var STATUSES = ['disponible', 'reserve', 'vendu'];
+
+  // ── DOM ──────────────────────────────────────────────────
+  var loginView     = document.getElementById('loginView');
+  var dashboardView = document.getElementById('dashboardView');
+  var adminUser     = document.getElementById('adminUser');
+  var adminEmail    = document.getElementById('adminEmail');
+  var loginForm     = document.getElementById('loginForm');
+  var loginError    = document.getElementById('loginError');
+  var btnLogin      = document.getElementById('btnLogin');
+  var btnLogout     = document.getElementById('btnLogout');
+  var btnSave       = document.getElementById('btnSave');
+  var saveFeedback  = document.getElementById('saveFeedback');
+  var villaCards    = document.getElementById('villaCards');
+  var lastUpdated   = document.getElementById('lastUpdated');
+
+  // ── Session state ───────────────────────────────────────
+  var idToken = null;
+  var refreshToken = null;
+  var tokenExpiry = 0;
+
+  // ── Auth: Sign in ───────────────────────────────────────
+  function signIn(email, password) {
+    return fetch(FIREBASE_AUTH_URL + ':signInWithPassword?key=' + FIREBASE_API_KEY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, password: password, returnSecureToken: true })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data.error) {
+        var msg = 'Identifiants incorrects.';
+        if (data.error.message === 'TOO_MANY_ATTEMPTS_TRY_LATER') {
+          msg = 'Trop de tentatives. R\u00E9essayez plus tard.';
+        }
+        throw new Error(msg);
+      }
+      idToken = data.idToken;
+      refreshToken = data.refreshToken;
+      tokenExpiry = Date.now() + (parseInt(data.expiresIn, 10) * 1000);
+      sessionStorage.setItem('fb_idToken', idToken);
+      sessionStorage.setItem('fb_refreshToken', refreshToken);
+      sessionStorage.setItem('fb_tokenExpiry', String(tokenExpiry));
+      sessionStorage.setItem('fb_email', data.email);
+      return data;
+    });
+  }
+
+  // ── Auth: Refresh token ─────────────────────────────────
+  function refreshIdToken() {
+    if (!refreshToken) return Promise.reject(new Error('No refresh token'));
+    return fetch('https://securetoken.googleapis.com/v1/token?key=' + FIREBASE_API_KEY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: 'grant_type=refresh_token&refresh_token=' + encodeURIComponent(refreshToken)
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data.error) throw new Error('Session expir\u00E9e');
+      idToken = data.id_token;
+      refreshToken = data.refresh_token;
+      tokenExpiry = Date.now() + (parseInt(data.expires_in, 10) * 1000);
+      sessionStorage.setItem('fb_idToken', idToken);
+      sessionStorage.setItem('fb_refreshToken', refreshToken);
+      sessionStorage.setItem('fb_tokenExpiry', String(tokenExpiry));
+      return idToken;
+    });
+  }
+
+  // ── Auth: Get valid token ───────────────────────────────
+  function getValidToken() {
+    if (idToken && Date.now() < tokenExpiry - 60000) return Promise.resolve(idToken);
+    return refreshIdToken();
+  }
+
+  // ── Auth: Sign out ──────────────────────────────────────
+  function signOut() {
+    idToken = null; refreshToken = null; tokenExpiry = 0;
+    sessionStorage.clear();
+    showLogin();
+  }
+
+  // ── UI: Switch views ────────────────────────────────────
+  function showLogin() {
+    loginView.classList.remove('hidden');
+    dashboardView.classList.add('hidden');
+    adminUser.classList.add('hidden');
+    loginError.classList.remove('show');
+    loginForm.reset();
+  }
+
+  function showDashboard(email) {
+    loginView.classList.add('hidden');
+    dashboardView.classList.remove('hidden');
+    adminUser.classList.remove('hidden');
+    adminEmail.textContent = email || '';
+    loadVillaStatuses();
+  }
+
+  // ── Dashboard: Build villa cards ────────────────────────
+  function buildVillaCards(currentStatuses) {
+    villaCards.innerHTML = '';
+    VILLAS.forEach(function(villa) {
+      var status = (currentStatuses && currentStatuses[villa.id] && currentStatuses[villa.id].status) || 'disponible';
+      var card = document.createElement('div');
+      card.className = 'villa-card';
+
+      var selectOptions = STATUSES.map(function(s) {
+        var selected = s === status ? ' selected' : '';
+        return '<option value="' + s + '"' + selected + '>' + STATUS_LABELS[s] + '</option>';
+      }).join('');
+
+      card.innerHTML =
+        '<div class="villa-card-left">' +
+          '<div class="villa-letter">' + villa.id + '</div>' +
+          '<div class="villa-info">' +
+            '<strong>Villa ' + villa.id + '</strong><br>' +
+            villa.surface + ' &middot; Jardin ' + villa.jardin + '<br>' +
+            villa.prix +
+          '</div>' +
+        '</div>' +
+        '<div>' +
+          '<span class="status-dot dot-' + status + '" id="dot-' + villa.id + '"></span>' +
+          '<select class="status-select" data-villa="' + villa.id + '">' +
+            selectOptions +
+          '</select>' +
+        '</div>';
+
+      villaCards.appendChild(card);
+    });
+
+    // Update dots on change
+    var selects = villaCards.querySelectorAll('.status-select');
+    for (var i = 0; i < selects.length; i++) {
+      selects[i].addEventListener('change', function() {
+        var dot = document.getElementById('dot-' + this.dataset.villa);
+        if (dot) dot.className = 'status-dot dot-' + this.value;
+      });
+    }
+  }
+
+  // ── Dashboard: Load statuses from Firebase ──────────────
+  function loadVillaStatuses() {
+    fetch(FIREBASE_DB_URL + '/villas.json')
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        buildVillaCards(data);
+        lastUpdated.textContent = 'Derni\u00E8re v\u00E9rification : ' + new Date().toLocaleString('fr-CH');
+        lastUpdated.style.color = '';
+      })
+      .catch(function() {
+        buildVillaCards(null);
+        lastUpdated.textContent = 'Impossible de charger les donn\u00E9es Firebase.';
+        lastUpdated.style.color = '#c0392b';
+      });
+  }
+
+  // ── Dashboard: Save statuses to Firebase ────────────────
+  function saveStatuses() {
+    var updates = {};
+    var selects = villaCards.querySelectorAll('.status-select');
+    for (var i = 0; i < selects.length; i++) {
+      updates[selects[i].dataset.villa] = { status: selects[i].value };
+    }
+
+    btnSave.disabled = true;
+    btnSave.textContent = 'Enregistrement\u2026';
+    saveFeedback.classList.remove('show', 'success', 'error');
+
+    getValidToken()
+      .then(function(token) {
+        return fetch(FIREBASE_DB_URL + '/villas.json?auth=' + token, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updates)
+        });
+      })
+      .then(function(res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      })
+      .then(function() {
+        btnSave.disabled = false;
+        btnSave.textContent = 'Enregistrer';
+        saveFeedback.textContent = '\u2713 Modifications enregistr\u00E9es';
+        saveFeedback.className = 'save-feedback show success';
+        lastUpdated.textContent = 'Derni\u00E8re sauvegarde : ' + new Date().toLocaleString('fr-CH');
+        lastUpdated.style.color = '';
+        setTimeout(function() { saveFeedback.classList.remove('show'); }, 4000);
+      })
+      .catch(function(err) {
+        btnSave.disabled = false;
+        btnSave.textContent = 'Enregistrer';
+        if (err.message === 'Session expir\u00E9e') {
+          saveFeedback.textContent = 'Session expir\u00E9e. Veuillez vous reconnecter.';
+          setTimeout(signOut, 2000);
+        } else {
+          saveFeedback.textContent = 'Erreur lors de la sauvegarde.';
+        }
+        saveFeedback.className = 'save-feedback show error';
+      });
+  }
+
+  // ── Event listeners ─────────────────────────────────────
+  loginForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var email = document.getElementById('loginEmail').value.trim();
+    var password = document.getElementById('loginPassword').value;
+    if (!email || !password) return;
+
+    btnLogin.disabled = true;
+    btnLogin.textContent = 'Connexion\u2026';
+    loginError.classList.remove('show');
+
+    signIn(email, password)
+      .then(function(data) {
+        btnLogin.disabled = false;
+        btnLogin.textContent = 'Se connecter';
+        showDashboard(data.email);
+      })
+      .catch(function(err) {
+        btnLogin.disabled = false;
+        btnLogin.textContent = 'Se connecter';
+        loginError.textContent = err.message;
+        loginError.classList.add('show');
+      });
+  });
+
+  btnLogout.addEventListener('click', signOut);
+  btnSave.addEventListener('click', saveStatuses);
+
+  // ── Session restore ─────────────────────────────────────
+  var storedToken   = sessionStorage.getItem('fb_idToken');
+  var storedRefresh = sessionStorage.getItem('fb_refreshToken');
+  var storedExpiry  = parseInt(sessionStorage.getItem('fb_tokenExpiry'), 10);
+  var storedEmail   = sessionStorage.getItem('fb_email');
+
+  if (storedToken && storedRefresh && storedExpiry > Date.now()) {
+    idToken = storedToken;
+    refreshToken = storedRefresh;
+    tokenExpiry = storedExpiry;
+    showDashboard(storedEmail);
+  } else if (storedRefresh) {
+    refreshToken = storedRefresh;
+    refreshIdToken()
+      .then(function() { showDashboard(storedEmail); })
+      .catch(function() { showLogin(); });
+  } else {
+    showLogin();
+  }
+})();
+</script>
+</body>
+</html>
