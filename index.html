@@ -581,6 +581,9 @@
       </div>
       <div class="fade-in">
         <form id="contactForm" novalidate>
+          <input type="hidden" name="access_key" value="52d7116d-e01c-48f7-bdb4-bb65cd3a3ae5">
+          <input type="hidden" name="subject" value="Nouveau message — Villas Vergers 14">
+          <input type="hidden" name="from_name" value="Vergers 14 Contact">
           <div class="form-row">
             <div class="form-group">
               <label for="nom">Nom *</label>
@@ -701,10 +704,23 @@
     showErr('email',!validEmail(v.email)); if(!validEmail(v.email)) ok=false;
     showErr('message',!v.message); if(!v.message) ok=false;
     if(ok){
-      form.reset();
-      const s=document.getElementById('formSuccess');
-      s.classList.add('show');
-      setTimeout(()=>s.classList.remove('show'),6000);
+      fetch('https://api.web3forms.com/submit',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          access_key:'52d7116d-e01c-48f7-bdb4-bb65cd3a3ae5',
+          subject:'Nouveau message — Villas Vergers 14',
+          from_name:'Vergers 14 Contact',
+          nom:v.nom,prenom:v.prenom,telephone:v.telephone,email:v.email,message:v.message
+        })
+      }).then(r=>r.json()).then(data=>{
+        if(data.success){
+          form.reset();
+          const s=document.getElementById('formSuccess');
+          s.classList.add('show');
+          setTimeout(()=>s.classList.remove('show'),6000);
+        } else { alert('Erreur lors de l\'envoi. Veuillez réessayer.'); }
+      }).catch(()=>alert('Erreur réseau. Veuillez réessayer.'));
     }
   });
   Object.keys(errMap).forEach(id => {
