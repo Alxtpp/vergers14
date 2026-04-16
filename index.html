@@ -97,6 +97,7 @@
     tbody td { padding:16px 18px; font-size:.9rem; color:var(--slate); white-space:nowrap; }
     tbody td.villa-name { font-family:'DM Sans',sans-serif; font-weight:700; font-size:1rem; color:var(--black-g); }
     tbody td.prix { font-family:'DM Sans',sans-serif; font-weight:700; color:var(--green); }
+    tbody td.prix.reserved { color:var(--mid-grey); font-style:italic; font-weight:500; }
     .table-note { margin-top:14px; font-size:.8rem; color:var(--mid-grey); line-height:1.6; }
 
     /* Toggle accordion villas (mobile only) */
@@ -379,7 +380,7 @@
           <thead><tr><th>Villa</th><th>Jardin</th><th>Orientation</th><th>Surface PPE**</th><th>Prix*</th></tr></thead>
           <tbody>
             <tr><td class="villa-name" data-label="Villa">A</td><td data-label="Jardin">268 m²</td><td data-label="Orientation">NE &amp; SE</td><td data-label="Surface PPE**">115.8 m²</td><td class="prix" data-label="Prix*">1 360 000 CHF</td></tr>
-            <tr><td class="villa-name" data-label="Villa">B</td><td data-label="Jardin">279 m²</td><td data-label="Orientation">SO &amp; SE</td><td data-label="Surface PPE**">116.3 m²</td><td class="prix" data-label="Prix*">1 460 000 CHF</td></tr>
+            <tr><td class="villa-name" data-label="Villa">B</td><td data-label="Jardin">279 m²</td><td data-label="Orientation">SO &amp; SE</td><td data-label="Surface PPE**">116.3 m²</td><td class="prix reserved" data-label="Prix*">Réservée</td></tr>
             <tr><td class="villa-name" data-label="Villa">C</td><td data-label="Jardin">442 m²</td><td data-label="Orientation">NE &amp; SE</td><td data-label="Surface PPE**">116.3 m²</td><td class="prix" data-label="Prix*">1 430 000 CHF</td></tr>
             <tr><td class="villa-name" data-label="Villa">D</td><td data-label="Jardin">823 m²</td><td data-label="Orientation">SO &amp; SE</td><td data-label="Surface PPE**">116.3 m²</td><td class="prix" data-label="Prix*">1 490 000 CHF</td></tr>
           </tbody>
